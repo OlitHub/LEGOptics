@@ -32,13 +32,13 @@ class Manuel : AppCompatActivity(){
 
 
     companion object {
-        val listItem1 = ListPage(1, "Liste 1", "etape1")
-        val listItem2 = ListPage(2, "Liste 2", "etape2")
-        val listItem3 = ListPage(3, "Liste 3", "etape3")
-        val listItem4 = ListPage(4, "Liste 4", "etape4")
-        val listItem5 = ListPage(5, "Liste 5", "etape5")
-        val listItem6 = ListPage(6, "Liste 6", "etape6")
-        val listItem7 = ListPage(7, "Liste 7", "etape7")
+        val listItem1 = ListPage(1, "Etape 1", "etape1")
+        val listItem2 = ListPage(1, "Etape 2", "etape2")
+        val listItem3 = ListPage(1, "Etape 3", "etape3")
+        val listItem4 = ListPage(1, "Etape 4", "etape4")
+        val listItem5 = ListPage(1, "Etape 5", "etape5")
+        val listItem6 = ListPage(1, "Etape 6", "etape6")
+        val listItem7 = ListPage(1, "Etape 7", "etape7")
 
         var Manuel_pages = listOf(listItem1, listItem2, listItem3, listItem4, listItem5, listItem6, listItem7)
     }
