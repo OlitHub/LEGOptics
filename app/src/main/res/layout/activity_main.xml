@@ -51,5 +51,14 @@
         android:layout_marginTop="16dp"
         android:text="OK" />
 
+    <Button
+        android:id="@+id/voiceButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Voice Command"
+        android:layout_below="@id/okButton"
+        />
+
+
 </RelativeLayout>
 
