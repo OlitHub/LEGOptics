@@ -19,7 +19,8 @@ data class ListPage(
 data class List_Man(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
-    @SerializedName("imagePath") val imagePath: String
+    @SerializedName("imagePath") val imagePath: String,
+    @SerializedName("pages") val pages: List<ListPage>
 )
 
 

@@ -16,7 +16,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="MainActivity"
+            android:label="LegOptics"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="true">
             <intent-filter>
@@ -28,7 +28,7 @@
 
         <activity
             android:name=".ListMan"
-            android:label="ListMan"
+            android:label="Liste des manuels"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity

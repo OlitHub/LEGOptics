@@ -1,9 +1,11 @@
 package com.example.temp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 
 class Manuel : AppCompatActivity(){
 
@@ -11,10 +13,16 @@ class Manuel : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.manuel)
 
+        val gson = Gson()
+        val json = intent.getStringExtra("pages")
+        if (json != null) {
+            Log.i("json", json)
+        }
+        var Manuel_page = gson.fromJson(json, Array<ListPage>::class.java).toList()
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewManuel)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = ManuelAdapter(Manuel_pages)
+        val adapter = ManuelAdapter(Manuel_page)
 
         adapter.setOnItemClickListener(object : ManuelAdapter.OnItemClickListener {
             override fun onItemClick(listItem: ListPage) {
@@ -30,18 +38,6 @@ class Manuel : AppCompatActivity(){
 
     }
 
-
-    companion object {
-        val listItem1 = ListPage(1, "Etape 1", "etape1")
-        val listItem2 = ListPage(1, "Etape 2", "etape2")
-        val listItem3 = ListPage(1, "Etape 3", "etape3")
-        val listItem4 = ListPage(1, "Etape 4", "etape4")
-        val listItem5 = ListPage(1, "Etape 5", "etape5")
-        val listItem6 = ListPage(1, "Etape 6", "etape6")
-        val listItem7 = ListPage(1, "Etape 7", "etape7")
-
-        var Manuel_pages = listOf(listItem1, listItem2, listItem3, listItem4, listItem5, listItem6, listItem7)
-    }
 
 }
 
