@@ -3,6 +3,7 @@ package com.example.temp
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.speech.RecognitionListener
@@ -15,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
+import com.google.gson.Gson
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +29,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
 
     private lateinit var speechRecognizer: SpeechRecognizer
+    private var isListening: Boolean = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // La permission n'est pas accordée, demande à l'utilisateur de l'accorder
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 123)
+        }
 
         editTextPseudo = findViewById(R.id.usernameEditText)
         editTextPassword = findViewById(R.id.passwordEditText)
@@ -67,47 +79,47 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val voiceButton: Button = findViewById(R.id.voiceButton)
-
-        // Configurez le bouton pour écouter le clic et activer la reconnaissance vocale
-        voiceButton.setOnClickListener {
-            startSpeechRecognition()
-            Log.i("MainActivity", "Bouton de la voix cliqué")
-        }
-
+//////////////////////////////////////////////////////////////////////////////////////////
         // Initialisez SpeechRecognizer
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-        Log.i("MainActivity", "Bouton de la voix cliqué")
-
-
 
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            // ...
+
             override fun onReadyForSpeech(params: Bundle?) {
-                // La reconnaissance vocale est prête à écouter
+                // Implémentation de la méthode onReadyForSpeech
+                Log.i("Speech", "onReadyForSpeech")
             }
 
             override fun onBeginningOfSpeech() {
-                // Le début de l'entrée vocale a été détecté
+                // Implémentation de la méthode onBeginningOfSpeech
+
+                Log.i("Speech", "onBeginningOfSpeech")
             }
 
             override fun onRmsChanged(rmsdB: Float) {
-                // Le niveau de signal audio a changé
+                // Implémentation de la méthode onRmsChanged
+                //Log.i("Speech", "onRmsChanged")
             }
 
             override fun onBufferReceived(buffer: ByteArray?) {
-                // Les données audio sont en cours de réception
+                // Implémentation de la méthode onBufferReceived
+                Log.i("Speech", "onBufferReceived")
             }
 
             override fun onEndOfSpeech() {
-                // La fin de l'entrée vocale a été détectée
+                // Implémentation de la méthode onEndOfSpeech
+                Log.i("Speech", "onEndOfSpeech")
+                restartSpeechRecognition()
             }
 
             override fun onError(error: Int) {
-                // Une erreur s'est produite lors de la reconnaissance vocale
+                // Implémentation de la méthode onError
+                Log.i("Speech", "onError")
+                restartSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
-                // Les résultats de la reconnaissance vocale sont disponibles
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
                 if (!matches.isNullOrEmpty()) {
@@ -116,21 +128,29 @@ class MainActivity : AppCompatActivity() {
                         // Lancer l'activité ListMan
                         val intent = Intent(this@MainActivity, ListMan::class.java)
                         startActivity(intent)
+                        isListening = false
                     }
+
                 }
+
             }
 
             override fun onPartialResults(partialResults: Bundle?) {
-                // Les résultats partiels de la reconnaissance vocale sont disponibles
+                // Implémentation de la méthode onPartialResults
+                Log.i("Speech", "onPartialResults")
             }
 
             override fun onEvent(eventType: Int, params: Bundle?) {
-                // Des événements supplémentaires sont disponibles
+                // Implémentation de la méthode onEvent
+                Log.i("Speech", "onEvent")
             }
+
         })
 
+        startSpeechRecognition()
 
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -153,23 +173,40 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
     private fun startSpeechRecognition() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
 
         // Définissez la langue de reconnaissance vocale si nécessaire
-        // intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fr-FR")
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fr-FR")
 
         // Lancez la reconnaissance vocale
         speechRecognizer.startListening(intent)
+        if(!isListening){
+            speechRecognizer.destroy()
+            Log.i("Speech", "destroyed")
+        }
+    }
+
+    private fun stopSpeechRecognition() {
+        speechRecognizer.stopListening()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
         // Libérez les ressources de SpeechRecognizer
+        //speechRecognizer.destroy()
         speechRecognizer.destroy()
     }
+
+    private fun restartSpeechRecognition() {
+        stopSpeechRecognition()
+        startSpeechRecognition()
+    }
+
 
 
 }

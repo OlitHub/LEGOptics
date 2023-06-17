@@ -1,6 +1,10 @@
 package com.example.temp
 
+import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,6 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 
 class Manuel : AppCompatActivity(){
+
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private var isListening: Boolean = true
+    private var currentPagePosition: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,18 +35,146 @@ class Manuel : AppCompatActivity(){
 
         adapter.setOnItemClickListener(object : ManuelAdapter.OnItemClickListener {
             override fun onItemClick(listItem: ListPage) {
-                val currentPosition = adapter.getItemList().indexOf(listItem)
-                val nextPosition = (currentPosition + 1)
+                currentPagePosition = adapter.getItemList().indexOf(listItem)
+                val nextPosition = (currentPagePosition + 1)
 
                 // Afficher l'élément suivant
                 recyclerView.scrollToPosition(nextPosition)
             }
         })
 
+
         recyclerView.adapter = adapter
+
+
+
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+        // Initialisez SpeechRecognizer
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            // ...
+
+            override fun onReadyForSpeech(params: Bundle?) {
+                // Implémentation de la méthode onReadyForSpeech
+                Log.i("Speech3", "onReadyForSpeech")
+            }
+
+            override fun onBeginningOfSpeech() {
+                // Implémentation de la méthode onBeginningOfSpeech
+
+                Log.i("Speech3", "onBeginningOfSpeech")
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+                // Implémentation de la méthode onRmsChanged
+                //Log.i("Speech2", "onRmsChanged")
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+                // Implémentation de la méthode onBufferReceived
+                Log.i("Speech3", "onBufferReceived")
+            }
+
+            override fun onEndOfSpeech() {
+                // Implémentation de la méthode onEndOfSpeech
+                Log.i("Speech3", "onEndOfSpeech")
+                restartSpeechRecognition()
+            }
+
+            override fun onError(error: Int) {
+                // Implémentation de la méthode onError
+                Log.i("Speech3", "onError")
+                restartSpeechRecognition()
+            }
+
+            override fun onResults(results: Bundle?) {
+                // Les résultats de la reconnaissance vocale sont disponibles
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                Log.i("matches", matches.toString())
+
+                if (!matches.isNullOrEmpty()) {
+                    val voiceCommand = matches[0]
+                    if (voiceCommand.equals("Ensuite", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        runOnUiThread {
+                            val nextPosition = (currentPagePosition + 1)
+                            if (nextPosition < adapter.getItemList().size) {
+                                currentPagePosition = nextPosition
+                                recyclerView.scrollToPosition(nextPosition)
+                            }
+                        }
+                    }
+
+                    if (voiceCommand.equals("Précédent", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        runOnUiThread {
+                            val nextPosition = (currentPagePosition - 1)
+                            if (nextPosition < adapter.getItemList().size) {
+                                currentPagePosition = nextPosition
+                                recyclerView.scrollToPosition(nextPosition)
+                            }
+                        }
+                    }
+                    restartSpeechRecognition()
+                }
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+                // Implémentation de la méthode onPartialResults
+                Log.i("Speech3", "onPartialResults")
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+                // Implémentation de la méthode onEvent
+                Log.i("Speech3", "onEvent")
+            }
+
+        })
+
+        startSpeechRecognition()
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     }
 
+
+    private fun startSpeechRecognition() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+
+        // Définissez la langue de reconnaissance vocale si nécessaire
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fr-FR")
+
+        // Lancez la reconnaissance vocale
+        speechRecognizer.startListening(intent)
+        if(!isListening){
+            speechRecognizer.destroy()
+            Log.i("Speech", "destroyed")
+        }
+    }
+
+    private fun stopSpeechRecognition() {
+        speechRecognizer.stopListening()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Libérez les ressources de SpeechRecognizer
+        //speechRecognizer.destroy()
+        speechRecognizer.destroy()
+    }
+
+    private fun restartSpeechRecognition() {
+        stopSpeechRecognition()
+        startSpeechRecognition()
+    }
 
 }
 
