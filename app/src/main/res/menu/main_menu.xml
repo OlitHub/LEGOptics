@@ -7,4 +7,9 @@
         android:title="Préférences"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_3d"
+        android:title="Visualisation 3D"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

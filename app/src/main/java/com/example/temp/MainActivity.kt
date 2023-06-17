@@ -72,6 +72,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+            R.id.menu_3d ->{
+                startActivity(Intent(this, ArVisuActivity::class.java))
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
