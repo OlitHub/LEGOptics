@@ -21,7 +21,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="LegOptics"
+            android:label="LEGOptics"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="true">
             <intent-filter>
