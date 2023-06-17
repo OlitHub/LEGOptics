@@ -22,7 +22,7 @@ class ListMan : AppCompatActivity(){
 
 
     companion object {
-        val listItem1 = List_Man(1, "Manuel 1", "Poule")
+        val listItem1 = List_Man(1, "Manuel 1", "poule")
         val listItem2 = List_Man(1, "Manuel 2", "etape2")
         val listItem3 = List_Man(1, "Manuel 3", "etape3")
 

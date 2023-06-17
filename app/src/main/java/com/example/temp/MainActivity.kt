@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
 
             if(pseudo=="vlad" && password=="pmr"){
-                val intent = Intent(this, Manuel::class.java)
+                val intent = Intent(this, ListMan::class.java)
                 intent.putExtra("pseudo", pseudo)
                 intent.putExtra("password", password)
                 startActivity(intent)

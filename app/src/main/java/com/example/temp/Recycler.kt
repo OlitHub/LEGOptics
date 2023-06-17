@@ -121,7 +121,7 @@ class ListManuelAdapter(private val itemList: List<List_Man>) : RecyclerView.Ada
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.page_man, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.liste_man, parent, false)
         return ViewHolder(view)
     }
 
