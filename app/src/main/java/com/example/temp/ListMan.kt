@@ -1,5 +1,6 @@
 package com.example.temp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,16 @@ class ListMan : AppCompatActivity(){
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewMans)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = ListManuelAdapter(Manuel_pages)
+
+        adapter.setOnItemClickListener(object : ListManuelAdapter.OnItemClickListener {
+            override fun onItemClick(listItem: List_Man) {
+                // Lancer l'activité Manuel.kt avec les données de l'élément cliqué
+                // par exemple :
+                val intent = Intent(this@ListMan, Manuel::class.java)
+
+                startActivity(intent)
+            }
+        })
 
         recyclerView.adapter = adapter
 
