@@ -115,8 +115,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
-                Log.i("Speech", "onError")
-                restartSpeechRecognition()
+                //Log.i("Speech", "onError")
+                //restartSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
