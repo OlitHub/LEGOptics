@@ -1,1 +1,1 @@
-# LegOptics
+# LEGOptics
