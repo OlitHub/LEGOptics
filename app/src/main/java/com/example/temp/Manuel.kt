@@ -32,6 +32,7 @@ class Manuel : AppCompatActivity(){
         if (json != null) {
             Log.i("json", json)
         }
+
         var Manuel_page = gson.fromJson(json, Array<ListPage>::class.java).toList()
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewManuel)

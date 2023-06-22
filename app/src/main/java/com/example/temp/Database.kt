@@ -37,18 +37,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db?.execSQL(createPagesTableQuery)
 
         // Insert sample data into manuals table
-        insertManual(db, "Manual 1", "poule")
-        insertManual(db, "Manual 2", "etape2")
-        insertManual(db, "Manual 3", "etape3")
+        insertManual(db, "Poule", "poule")
+        insertManual(db, "Poussins", "poussins")
+        insertManual(db, "LEGOptics", "legoptics")
 
         // Insert sample data into pages table
-        insertPage(db, 1, 1, "Etape 1", "etape1")
-        insertPage(db, 1, 2, "Etape 2", "etape2")
-        insertPage(db, 1, 3, "Etape 3", "etape3")
-        insertPage(db, 1, 4, "Etape 4", "etape4")
-        insertPage(db, 1, 5, "Etape 5", "etape5")
-        insertPage(db, 1, 6, "Etape 6", "etape6")
-        insertPage(db, 1, 7, "Etape 7", "etape7")
+        for (i in 1..12) {
+            insertPage(db, 1, i, "Page $i", "m1_$i")
+        }
+
+        for (i in 1..6) {
+            insertPage(db, 2, i, "Page $i", "m2_$i")
+        }
+
+        for (i in 1..11) {
+            insertPage(db, 3, i, "Page $i", "m3_$i")
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -88,7 +92,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 if (columnIndexPageNumber != -1 && columnIndexImagePath != -1) {
                     val pageNumber = cursor.getInt(columnIndexPageNumber)
                     val imagePath = cursor.getString(columnIndexImagePath)
-                    val listItem = ListPage(manualId, "Etape $pageNumber", imagePath)
+                    val listItem = ListPage(manualId, "Page $pageNumber", imagePath)
                     pages.add(listItem)
                 }
             }

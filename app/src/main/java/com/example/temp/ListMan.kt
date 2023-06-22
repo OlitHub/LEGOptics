@@ -96,7 +96,9 @@ class ListMan : AppCompatActivity(){
                 if (!matches.isNullOrEmpty()) {
                     Log.i("Speech2", matches.toString())
                     val voiceCommand = matches[0]
-                    if (voiceCommand.equals("Manuel 1", ignoreCase = true)) {
+                  
+                    if (voiceCommand.equals("un", ignoreCase = true)) {
+                      
                         // Lancer l'activité ListMan
                         val gson = Gson()
                         var json = gson.toJson(manuals[0].pages)
@@ -104,6 +106,26 @@ class ListMan : AppCompatActivity(){
                         intent.putExtra("pages", json)
                         speechRecognizer.destroy()
                         startActivity(intent)
+                    }
+
+                    if (voiceCommand.equals("deux", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val gson = Gson()
+                        var json = gson.toJson(manuals[1].pages)
+                        val intent = Intent(this@ListMan, Manuel::class.java)
+                        intent.putExtra("pages", json)
+                        startActivity(intent)
+                        isListening = false
+                    }
+
+                    if (voiceCommand.equals("trois", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val gson = Gson()
+                        var json = gson.toJson(manuals[2].pages)
+                        val intent = Intent(this@ListMan, Manuel::class.java)
+                        intent.putExtra("pages", json)
+                        startActivity(intent)
+                        isListening = false
                     }
 
                 }
