@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 Log.i("Speech", "onResults")
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech1", matches.toString())
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("Connexion", ignoreCase = true)) {
                         // Lancer l'activité ListMan

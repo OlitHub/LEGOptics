@@ -115,7 +115,6 @@ class ListMan : AppCompatActivity(){
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
                         startActivity(intent)
-                        isListening = false
                     }
 
                     if (voiceCommand.equals("trois", ignoreCase = true)) {
@@ -125,7 +124,6 @@ class ListMan : AppCompatActivity(){
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
                         startActivity(intent)
-                        isListening = false
                     }
 
                 }
