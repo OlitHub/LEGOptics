@@ -218,6 +218,7 @@ class Manuel : AppCompatActivity(){
             }
             R.id.menu_3d ->{
                 startActivity(Intent(this, ArVisuActivity::class.java))
+                speechRecognizer.destroy()
                 return true
             }
         }

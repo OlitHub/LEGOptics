@@ -111,7 +111,7 @@ class ArVisuActivity : AppCompatActivity(), Scene.OnUpdateListener  {
 
         for(img in images){
             if(img.trackingState == TrackingState.TRACKING){
-                if(img.name.equals("qr_poulet")){
+                if(img.name.equals("img_poulet")){
                     Log.d("DBG_MSG","POULET !!")
                     if(modelCreated == false) {
                         val anchor: Anchor = img.createAnchor(img.centerPose)
@@ -128,8 +128,8 @@ class ArVisuActivity : AppCompatActivity(), Scene.OnUpdateListener  {
 
     fun setupImgDatabase(config : Config, sess:Session) {
         imageDatabase = AugmentedImageDatabase(sess)
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.qr_poulet)
-        pouletIndex = imageDatabase.addImage("qr_poulet", bitmap)
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.legoptics_aug)
+        pouletIndex = imageDatabase.addImage("img_poulet", bitmap)
         config.augmentedImageDatabase = imageDatabase
         sess.configure(config)
 
