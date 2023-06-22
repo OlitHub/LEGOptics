@@ -17,7 +17,6 @@ import android.Manifest
 class ListMan : AppCompatActivity(){
 
     private lateinit var speechRecognizer: SpeechRecognizer
-    private var isListening: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,19 +80,20 @@ class ListMan : AppCompatActivity(){
             override fun onEndOfSpeech() {
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech2", "onEndOfSpeech")
-                restartSpeechRecognition()
+                //startSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech2", "onError")
-                restartSpeechRecognition()
+                startSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech2", matches.toString())
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("test", ignoreCase = true)) {
                         // Lancer l'activité ListMan
@@ -101,11 +101,12 @@ class ListMan : AppCompatActivity(){
                         var json = gson.toJson(listMan1.pages)
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
+                        speechRecognizer.destroy()
                         startActivity(intent)
-                        isListening = false
                     }
 
                 }
+                startSpeechRecognition()
 
             }
 
@@ -156,10 +157,6 @@ class ListMan : AppCompatActivity(){
 
         // Lancez la reconnaissance vocale
         speechRecognizer.startListening(intent)
-        if(!isListening){
-            speechRecognizer.destroy()
-            Log.i("Speech2", "destroyed")
-        }
     }
 
     private fun stopSpeechRecognition() {
@@ -174,10 +171,6 @@ class ListMan : AppCompatActivity(){
         speechRecognizer.destroy()
     }
 
-    private fun restartSpeechRecognition() {
-        stopSpeechRecognition()
-        startSpeechRecognition()
-    }
 
 
 }

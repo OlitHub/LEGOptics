@@ -14,7 +14,7 @@ import com.google.gson.Gson
 class Manuel : AppCompatActivity(){
 
     private lateinit var speechRecognizer: SpeechRecognizer
-    private var isListening: Boolean = true
+
     private var currentPagePosition: Int = 0
 
 
@@ -48,13 +48,11 @@ class Manuel : AppCompatActivity(){
 
 
 
-
-
-
         //////////////////////////////////////////////////////////////////////////////////////////
 
         // Initialisez SpeechRecognizer
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
             // ...
 
@@ -82,23 +80,23 @@ class Manuel : AppCompatActivity(){
             override fun onEndOfSpeech() {
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech3", "onEndOfSpeech")
-                restartSpeechRecognition()
+                //startSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech3", "onError")
-                restartSpeechRecognition()
+                startSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
                 // Les résultats de la reconnaissance vocale sont disponibles
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                Log.i("matches", matches.toString())
 
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech3", matches.toString())
                     val voiceCommand = matches[0]
-                    if (voiceCommand.equals("Ensuite", ignoreCase = true)) {
+                    if (voiceCommand.equals("Suivant", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         runOnUiThread {
                             val nextPosition = (currentPagePosition + 1)
@@ -119,8 +117,9 @@ class Manuel : AppCompatActivity(){
                             }
                         }
                     }
-                    restartSpeechRecognition()
+
                 }
+                startSpeechRecognition()
             }
 
             override fun onPartialResults(partialResults: Bundle?) {
@@ -153,10 +152,6 @@ class Manuel : AppCompatActivity(){
 
         // Lancez la reconnaissance vocale
         speechRecognizer.startListening(intent)
-        if(!isListening){
-            speechRecognizer.destroy()
-            Log.i("Speech", "destroyed")
-        }
     }
 
     private fun stopSpeechRecognition() {
@@ -171,10 +166,6 @@ class Manuel : AppCompatActivity(){
         speechRecognizer.destroy()
     }
 
-    private fun restartSpeechRecognition() {
-        stopSpeechRecognition()
-        startSpeechRecognition()
-    }
 
 }
 

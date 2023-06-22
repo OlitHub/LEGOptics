@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
 
     private lateinit var speechRecognizer: SpeechRecognizer
-    private var isListening: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,28 +109,30 @@ class MainActivity : AppCompatActivity() {
             override fun onEndOfSpeech() {
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech", "onEndOfSpeech")
-                restartSpeechRecognition()
+                //startSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
-                //Log.i("Speech", "onError")
-                //restartSpeechRecognition()
+                Log.i("Speech", "onError")
+                startSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-
+                Log.i("Speech", "onResults")
                 if (!matches.isNullOrEmpty()) {
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("Connexion", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val intent = Intent(this@MainActivity, ListMan::class.java)
+                        speechRecognizer.destroy()
                         startActivity(intent)
-                        isListening = false
+                        return
                     }
 
                 }
+                startSpeechRecognition()
 
             }
 
@@ -184,10 +185,6 @@ class MainActivity : AppCompatActivity() {
 
         // Lancez la reconnaissance vocale
         speechRecognizer.startListening(intent)
-        if(!isListening){
-            speechRecognizer.destroy()
-            Log.i("Speech", "destroyed")
-        }
     }
 
     private fun stopSpeechRecognition() {
@@ -202,10 +199,6 @@ class MainActivity : AppCompatActivity() {
         speechRecognizer.destroy()
     }
 
-    private fun restartSpeechRecognition() {
-        stopSpeechRecognition()
-        startSpeechRecognition()
-    }
 
 
 
