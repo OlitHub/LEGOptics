@@ -115,7 +115,11 @@ class MainActivity : AppCompatActivity() {
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech", "onError")
+<<<<<<< HEAD
+                restartSpeechRecognition()
+=======
                 startSpeechRecognition()
+>>>>>>> 9f583f1674d9be553929f468e92f6881041d6c1a
             }
 
             override fun onResults(results: Bundle?) {
@@ -169,6 +173,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopSpeechRecognition() {
         speechRecognizer.stopListening()
+        speechRecognizer.destroy()
     }
 
     override fun onDestroy() {
