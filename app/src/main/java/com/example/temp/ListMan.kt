@@ -94,6 +94,7 @@ class ListMan : AppCompatActivity(){
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech2", matches.toString())
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("test", ignoreCase = true)) {
                         // Lancer l'activité ListMan
@@ -101,11 +102,12 @@ class ListMan : AppCompatActivity(){
                         var json = gson.toJson(manuals[0].pages)
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
+                        speechRecognizer.destroy()
                         startActivity(intent)
                     }
 
                 }
-
+                startSpeechRecognition()
             }
 
             override fun onPartialResults(partialResults: Bundle?) {
