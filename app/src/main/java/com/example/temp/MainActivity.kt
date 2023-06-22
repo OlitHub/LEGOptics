@@ -128,7 +128,6 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this@MainActivity, ListMan::class.java)
                         speechRecognizer.destroy()
                         startActivity(intent)
-                        return
                     }
 
                 }
@@ -153,25 +152,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_preferences -> {
-                //val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-                return true
-            }
-            R.id.menu_3d ->{
-                startActivity(Intent(this, ArVisuActivity::class.java))
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 
 
