@@ -7,5 +7,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/arFrag"
-        android:name="com.google.ar.sceneform.ux.ArFragment"/>
+        android:name="com.example.temp.ar.VisuArFragment"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
