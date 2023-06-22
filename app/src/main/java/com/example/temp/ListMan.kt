@@ -2,6 +2,7 @@ package com.example.temp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -14,7 +15,7 @@ import android.util.Log
 class ListMan : AppCompatActivity(){
 
     private lateinit var speechRecognizer: SpeechRecognizer
-    private var isListening: Boolean = true
+    private val handler = Handler()
     private val dbHelper = DatabaseHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,13 +82,12 @@ class ListMan : AppCompatActivity(){
             override fun onEndOfSpeech() {
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech2", "onEndOfSpeech")
-                restartSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech2", "onError")
-                restartSpeechRecognition()
+                pauseBeforeStartSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
@@ -102,7 +102,6 @@ class ListMan : AppCompatActivity(){
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
                         startActivity(intent)
-                        isListening = false
                     }
 
                 }
@@ -121,7 +120,7 @@ class ListMan : AppCompatActivity(){
 
         })
 
-        startSpeechRecognition()
+        startSpeechRecognitionWithDelay(200)
 
         //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -136,10 +135,6 @@ class ListMan : AppCompatActivity(){
 
         // Lancez la reconnaissance vocale
         speechRecognizer.startListening(intent)
-        if(!isListening){
-            speechRecognizer.destroy()
-            Log.i("Speech2", "destroyed")
-        }
     }
 
     private fun stopSpeechRecognition() {
@@ -154,9 +149,19 @@ class ListMan : AppCompatActivity(){
         speechRecognizer.destroy()
     }
 
-    private fun restartSpeechRecognition() {
-        stopSpeechRecognition()
-        startSpeechRecognition()
+    private fun startSpeechRecognitionWithDelay(delayMillis: Long) {
+        handler.postDelayed({
+            startSpeechRecognition()
+        }, delayMillis)
+    }
+
+    private fun pauseBeforeStartSpeechRecognition() {
+        try {
+            Thread.sleep(500) // Pause de 2 secondes
+            startSpeechRecognitionWithDelay(100) // Appel de startSpeechRecognition() après la pause
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
 
