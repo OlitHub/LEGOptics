@@ -2,10 +2,13 @@ package com.example.temp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +20,8 @@ class Manuel : AppCompatActivity(){
 
     private var currentPagePosition: Int = 0
 
+    private val handler = Handler()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,7 @@ class Manuel : AppCompatActivity(){
         if (json != null) {
             Log.i("json", json)
         }
+
         var Manuel_page = gson.fromJson(json, Array<ListPage>::class.java).toList()
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewManuel)
@@ -86,7 +92,7 @@ class Manuel : AppCompatActivity(){
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech3", "onError")
-                startSpeechRecognition()
+                pauseBeforeStartSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
@@ -117,7 +123,21 @@ class Manuel : AppCompatActivity(){
                             }
                         }
                     }
+/*
+                    if (voiceCommand.equals("Retour", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val intent = Intent(this@Manuel, ListMan::class.java)
+                        speechRecognizer.destroy()
+                        startActivity(intent)
+                    }
 
+*/
+                    if (voiceCommand.equals("3D", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val intent = Intent(this@Manuel, ArVisuActivity::class.java)
+                        speechRecognizer.destroy()
+                        startActivity(intent)
+                    }
                 }
                 startSpeechRecognition()
             }
@@ -134,7 +154,7 @@ class Manuel : AppCompatActivity(){
 
         })
 
-        startSpeechRecognition()
+        startSpeechRecognitionWithDelay(200)
 
         //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -164,6 +184,43 @@ class Manuel : AppCompatActivity(){
         // Libérez les ressources de SpeechRecognizer
         //speechRecognizer.destroy()
         speechRecognizer.destroy()
+    }
+
+    private fun startSpeechRecognitionWithDelay(delayMillis: Long) {
+        handler.postDelayed({
+            startSpeechRecognition()
+        }, delayMillis)
+    }
+
+    private fun pauseBeforeStartSpeechRecognition() {
+        try {
+            Thread.sleep(500) // Pause de 2 secondes
+            startSpeechRecognitionWithDelay(100) // Appel de startSpeechRecognition() après la pause
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+    }
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_preferences -> {
+                //val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.menu_3d ->{
+                startActivity(Intent(this, ArVisuActivity::class.java))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

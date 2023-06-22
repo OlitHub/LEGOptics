@@ -123,13 +123,13 @@ class MainActivity : AppCompatActivity() {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 Log.i("Speech", "onResults")
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech1", matches.toString())
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("Connexion", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val intent = Intent(this@MainActivity, ListMan::class.java)
                         speechRecognizer.destroy()
                         startActivity(intent)
-                        return
                     }
 
                 }
@@ -154,25 +154,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_preferences -> {
-                //val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-                return true
-            }
-            R.id.menu_3d ->{
-                startActivity(Intent(this, ArVisuActivity::class.java))
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 
 
@@ -190,6 +171,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopSpeechRecognition() {
         speechRecognizer.stopListening()
+        speechRecognizer.destroy()
     }
 
     override fun onDestroy() {
