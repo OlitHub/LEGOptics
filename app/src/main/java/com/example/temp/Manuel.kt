@@ -12,6 +12,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.temp.ar.ArVisuActivity
 import com.google.gson.Gson
 
 class Manuel : AppCompatActivity(){
