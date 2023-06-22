@@ -68,7 +68,7 @@ class ManuelAdapter(private val itemList: List<ListPage>) : RecyclerView.Adapter
         } else {
             // Gérer le cas où l'identifiant de ressource est introuvable
             // par exemple, afficher une image par défaut ou laisser l'image vide
-            holder.imageView.setImageResource(R.drawable.etape1)
+            holder.imageView.setImageResource(R.drawable.m1_1)
         }
     }
 
@@ -135,7 +135,7 @@ class ListManuelAdapter(private val itemList: List<List_Man>) : RecyclerView.Ada
         } else {
             // Gérer le cas où l'identifiant de ressource est introuvable
             // par exemple, afficher une image par défaut ou laisser l'image vide
-            holder.imageView.setImageResource(R.drawable.etape1)
+            holder.imageView.setImageResource(R.drawable.m1_1)
         }
     }
 

@@ -95,10 +95,30 @@ class ListMan : AppCompatActivity(){
 
                 if (!matches.isNullOrEmpty()) {
                     val voiceCommand = matches[0]
-                    if (voiceCommand.equals("test", ignoreCase = true)) {
+                    if (voiceCommand.equals("un", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val gson = Gson()
                         var json = gson.toJson(manuals[0].pages)
+                        val intent = Intent(this@ListMan, Manuel::class.java)
+                        intent.putExtra("pages", json)
+                        startActivity(intent)
+                        isListening = false
+                    }
+
+                    if (voiceCommand.equals("deux", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val gson = Gson()
+                        var json = gson.toJson(manuals[1].pages)
+                        val intent = Intent(this@ListMan, Manuel::class.java)
+                        intent.putExtra("pages", json)
+                        startActivity(intent)
+                        isListening = false
+                    }
+
+                    if (voiceCommand.equals("trois", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val gson = Gson()
+                        var json = gson.toJson(manuals[2].pages)
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
                         startActivity(intent)
