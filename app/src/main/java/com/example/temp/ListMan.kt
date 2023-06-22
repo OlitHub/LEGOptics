@@ -96,7 +96,7 @@ class ListMan : AppCompatActivity(){
                 if (!matches.isNullOrEmpty()) {
                     Log.i("Speech2", matches.toString())
                     val voiceCommand = matches[0]
-                    if (voiceCommand.equals("test", ignoreCase = true)) {
+                    if (voiceCommand.equals("Manuel 1", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val gson = Gson()
                         var json = gson.toJson(manuals[0].pages)
