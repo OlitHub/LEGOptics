@@ -98,7 +98,7 @@ class Manuel : AppCompatActivity(){
 
                 if (!matches.isNullOrEmpty()) {
                     val voiceCommand = matches[0]
-                    if (voiceCommand.equals("Ensuite", ignoreCase = true)) {
+                    if (voiceCommand.equals("Suivant", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         runOnUiThread {
                             val nextPosition = (currentPagePosition + 1)
