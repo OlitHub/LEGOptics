@@ -111,27 +111,35 @@ class MainActivity : AppCompatActivity() {
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech", "onEndOfSpeech")
                 restartSpeechRecognition()
+                //startSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech", "onError")
+<<<<<<< HEAD
                 restartSpeechRecognition()
+=======
+                startSpeechRecognition()
+>>>>>>> 9f583f1674d9be553929f468e92f6881041d6c1a
             }
 
             override fun onResults(results: Bundle?) {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
+                Log.i("Speech", "onResults")
                 if (!matches.isNullOrEmpty()) {
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("Connexion", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val intent = Intent(this@MainActivity, ListMan::class.java)
+                        speechRecognizer.destroy()
                         startActivity(intent)
                         isListening = false
                     }
 
                 }
+                startSpeechRecognition()
 
             }
 

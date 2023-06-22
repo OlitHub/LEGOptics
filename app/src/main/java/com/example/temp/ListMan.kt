@@ -10,12 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import android.util.Log
+<<<<<<< HEAD
+=======
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
+import android.os.Handler
+>>>>>>> 9f583f1674d9be553929f468e92f6881041d6c1a
 
 class ListMan : AppCompatActivity(){
 
     private lateinit var speechRecognizer: SpeechRecognizer
+<<<<<<< HEAD
     private var isListening: Boolean = true
     private val dbHelper = DatabaseHelper(this)
+=======
+    private val handler = Handler()
+>>>>>>> 9f583f1674d9be553929f468e92f6881041d6c1a
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,30 +93,36 @@ class ListMan : AppCompatActivity(){
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech2", "onEndOfSpeech")
                 restartSpeechRecognition()
+                //startSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech2", "onError")
                 restartSpeechRecognition()
+                pauseBeforeStartSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech2", matches.toString())
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("test", ignoreCase = true)) {
+                    if (voiceCommand.equals("Manuel poulet", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val gson = Gson()
                         var json = gson.toJson(manuals[0].pages)
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
+                        speechRecognizer.destroy()
                         startActivity(intent)
                         isListening = false
                     }
 
                 }
+                startSpeechRecognition()
 
             }
 
@@ -123,11 +140,37 @@ class ListMan : AppCompatActivity(){
 
         startSpeechRecognition()
 
+        startSpeechRecognitionWithDelay(200)
+
         //////////////////////////////////////////////////////////////////////////////////////////
 
     }
 
+<<<<<<< HEAD
     private fun startSpeechRecognition() {
+=======
+
+    companion object {
+        val listItem1 = ListPage(1, "Etape 1", "etape1")
+        val listItem2 = ListPage(1, "Etape 2", "etape2")
+        val listItem3 = ListPage(1, "Etape 3", "etape3")
+        val listItem4 = ListPage(1, "Etape 4", "etape4")
+        val listItem5 = ListPage(1, "Etape 5", "etape5")
+        val listItem6 = ListPage(1, "Etape 6", "etape6")
+        val listItem7 = ListPage(1, "Etape 7", "etape7")
+
+        var pages_man = listOf(listItem1, listItem2, listItem3, listItem4, listItem5, listItem6, listItem7)
+
+        val listMan1 = List_Man(1, "Manuel 1", "poule", pages_man)
+        val listMan2 = List_Man(1, "Manuel 2", "etape2", pages_man)
+        val listMan3 = List_Man(1, "Manuel 3", "etape3", pages_man)
+
+        var Manuel_pages = listOf(listMan1, listMan2, listMan3)
+    }
+
+
+        private fun startSpeechRecognition() {
+>>>>>>> 9f583f1674d9be553929f468e92f6881041d6c1a
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
 
@@ -157,6 +200,19 @@ class ListMan : AppCompatActivity(){
     private fun restartSpeechRecognition() {
         stopSpeechRecognition()
         startSpeechRecognition()
+    private fun startSpeechRecognitionWithDelay(delayMillis: Long) {
+        handler.postDelayed({
+            startSpeechRecognition()
+        }, delayMillis)
+    }
+
+    private fun pauseBeforeStartSpeechRecognition() {
+        try {
+            Thread.sleep(500) // Pause de 2 secondes
+            startSpeechRecognitionWithDelay(100) // Appel de startSpeechRecognition() après la pause
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
 

@@ -2,10 +2,13 @@ package com.example.temp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +18,10 @@ class Manuel : AppCompatActivity(){
 
     private lateinit var speechRecognizer: SpeechRecognizer
     private var isListening: Boolean = true
+
     private var currentPagePosition: Int = 0
+
+    private val handler = Handler()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +61,7 @@ class Manuel : AppCompatActivity(){
 
         // Initialisez SpeechRecognizer
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
             // ...
 
@@ -83,20 +90,22 @@ class Manuel : AppCompatActivity(){
                 // Implémentation de la méthode onEndOfSpeech
                 Log.i("Speech3", "onEndOfSpeech")
                 restartSpeechRecognition()
+                //startSpeechRecognition()
             }
 
             override fun onError(error: Int) {
                 // Implémentation de la méthode onError
                 Log.i("Speech3", "onError")
                 restartSpeechRecognition()
+                pauseBeforeStartSpeechRecognition()
             }
 
             override fun onResults(results: Bundle?) {
                 // Les résultats de la reconnaissance vocale sont disponibles
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                Log.i("matches", matches.toString())
 
                 if (!matches.isNullOrEmpty()) {
+                    Log.i("Speech3", matches.toString())
                     val voiceCommand = matches[0]
                     if (voiceCommand.equals("Suivant", ignoreCase = true)) {
                         // Lancer l'activité ListMan
@@ -120,7 +129,23 @@ class Manuel : AppCompatActivity(){
                         }
                     }
                     restartSpeechRecognition()
+/*
+                    if (voiceCommand.equals("Retour", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val intent = Intent(this@Manuel, ListMan::class.java)
+                        speechRecognizer.destroy()
+                        startActivity(intent)
+                    }
+
+*/
+                    if (voiceCommand.equals("3D", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val intent = Intent(this@Manuel, ArVisuActivity::class.java)
+                        speechRecognizer.destroy()
+                        startActivity(intent)
+                    }
                 }
+                startSpeechRecognition()
             }
 
             override fun onPartialResults(partialResults: Bundle?) {
@@ -136,6 +161,7 @@ class Manuel : AppCompatActivity(){
         })
 
         startSpeechRecognition()
+        startSpeechRecognitionWithDelay(200)
 
         //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -174,7 +200,43 @@ class Manuel : AppCompatActivity(){
     private fun restartSpeechRecognition() {
         stopSpeechRecognition()
         startSpeechRecognition()
+    private fun startSpeechRecognitionWithDelay(delayMillis: Long) {
+        handler.postDelayed({
+            startSpeechRecognition()
+        }, delayMillis)
     }
+
+    private fun pauseBeforeStartSpeechRecognition() {
+        try {
+            Thread.sleep(500) // Pause de 2 secondes
+            startSpeechRecognitionWithDelay(100) // Appel de startSpeechRecognition() après la pause
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+    }
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_preferences -> {
+                //val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.menu_3d ->{
+                startActivity(Intent(this, ArVisuActivity::class.java))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 }
 
