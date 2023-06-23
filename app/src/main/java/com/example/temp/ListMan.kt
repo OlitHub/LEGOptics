@@ -114,6 +114,7 @@ class ListMan : AppCompatActivity(){
                         var json = gson.toJson(manuals[1].pages)
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
+                        speechRecognizer.destroy()
                         startActivity(intent)
                     }
 
@@ -123,6 +124,7 @@ class ListMan : AppCompatActivity(){
                         var json = gson.toJson(manuals[2].pages)
                         val intent = Intent(this@ListMan, Manuel::class.java)
                         intent.putExtra("pages", json)
+                        speechRecognizer.destroy()
                         startActivity(intent)
                     }
 
