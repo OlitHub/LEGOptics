@@ -124,7 +124,7 @@ class Manuel : AppCompatActivity(){
                             }
                         }
                     }
-/*
+
                     if (voiceCommand.equals("Retour", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val intent = Intent(this@Manuel, ListMan::class.java)
@@ -132,11 +132,17 @@ class Manuel : AppCompatActivity(){
                         startActivity(intent)
                     }
 
-*/
+                    if (voiceCommand.equals("quitter", ignoreCase = true)) {
+                        // Lancer l'activité ListMan
+                        val intent = Intent(this@Manuel, Manuel::class.java)
+                        speechRecognizer.destroy()
+                        startActivity(intent)
+                    }
+
+
                     if (voiceCommand.equals("3D", ignoreCase = true)) {
                         // Lancer l'activité ListMan
                         val intent = Intent(this@Manuel, ArVisuActivity::class.java)
-                        speechRecognizer.destroy()
                         startActivity(intent)
                     }
                 }
