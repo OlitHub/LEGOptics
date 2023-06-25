@@ -7,8 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.speech.RecognitionListener
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -19,8 +17,6 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
-import com.example.temp.ar.ArVisuActivity
-import com.google.gson.Gson
 
 
 class MainActivity : AppCompatActivity() {
