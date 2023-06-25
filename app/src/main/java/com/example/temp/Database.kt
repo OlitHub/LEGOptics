@@ -10,38 +10,36 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val DATABASE_NAME = "instruction_manuals.db"
         private const val DATABASE_VERSION = 1
 
-        // Table names
+        // Tables
         private const val TABLE_MANUALS = "manuals"
         private const val TABLE_PAGES = "pages"
 
-        // Common columns
+        // Colonnes communes
         private const val COLUMN_ID = "id"
         private const val COLUMN_IMAGE_PATH = "image_path"
 
-        // Manuals table columns
+        // Colonnes de la table des manuels
         private const val COLUMN_MANUAL_NAME = "manual_name"
 
-        // Pages table columns
+        // Colonnes spécifiques à la table des pages
         private const val COLUMN_ID_MANUAL = "idManual"
         private const val COLUMN_PAGE_NUMBER = "page_number"
         private const val COLUMN_PAGE_NAME = "page_name"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        // Create the manuals table
         val createManualsTableQuery = "CREATE TABLE IF NOT EXISTS $TABLE_MANUALS ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_MANUAL_NAME TEXT, $COLUMN_IMAGE_PATH TEXT)"
         db?.execSQL(createManualsTableQuery)
 
-        // Create the pages table
         val createPagesTableQuery = "CREATE TABLE IF NOT EXISTS $TABLE_PAGES ($COLUMN_ID_MANUAL INTEGER, $COLUMN_PAGE_NUMBER INTEGER, $COLUMN_PAGE_NAME TEXT, $COLUMN_IMAGE_PATH TEXT, FOREIGN KEY ($COLUMN_ID_MANUAL) REFERENCES $TABLE_MANUALS($COLUMN_ID))"
         db?.execSQL(createPagesTableQuery)
 
-        // Insert sample data into manuals table
+        // Pour le moment, les manuels sont entrés manuellement dans l'application
+
         insertManual(db, "Poule", "poule")
         insertManual(db, "Poussins", "poussins")
         insertManual(db, "LEGOptics", "legoptics")
 
-        // Insert sample data into pages table
         for (i in 1..12) {
             insertPage(db, 1, i, "Page $i", "m1_$i")
         }
@@ -56,7 +54,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        // Handle database upgrades if needed
     }
 
     private fun insertManual(db: SQLiteDatabase?, manualName: String, imagePath: String) {
